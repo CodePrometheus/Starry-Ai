@@ -1,0 +1,30 @@
+IT 知识主问题拉取
+
+SELECT DISTINCT
+    a.primary_question,
+    -- a.similar_question,
+    e.answer
+FROM
+    oc_knowledge_management a
+    JOIN oc_knowledge_category_switch b ON a.category_id = b.category_id
+    JOIN oc_answer_mapping d ON a.knowledge_id = d.knowledge_id
+    JOIN oc_answer_new e ON e.answer_id = d.answer_id
+WHERE
+    a.yn = 1
+    AND d.yn = 1
+    AND e.yn = 1
+    AND a.STATUS IN ( 1, 2, 4 )
+    AND b.is_open = 1
+    AND b.yn = 1
+    AND b.flow_code='LXHITDH'
+    AND a.base_code IN (
+        SELECT
+            c.base_code
+        FROM
+            oc_knowledge_base_type c
+        WHERE
+            c.yn = 1
+        AND c.base_type_code IN ( 'bot', 'chat') OR a.base_code IN ("XIANLIAOBASE", "ZRGBASE"))
+    AND e.yn = 1
+    AND e.channel_flag LIKE '%%在线%%'
+    AND e.answer not like 'text%'
