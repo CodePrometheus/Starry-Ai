@@ -1,1 +1,1 @@
-# Starry-PyTorch
+# Starry-Ai
